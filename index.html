@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather App</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    padding-top:50px;
+}
+
+.container{
+    width:300px;
+    margin:auto;
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+}
+
+input{
+    width:80%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    padding:10px 20px;
+    background:#0ea5e9;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+#weatherResult{
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Weather App</h1>
+
+    <input type="text" id="city" placeholder="Enter City Name">
+
+    <br>
+
+    <button onclick="getWeather()">Search</button>
+
+    <div id="weatherResult"></div>
+</div>
+
+<script>
+async function getWeather(){
+
+    const city = document.getElementById("city").value;
+
+    if(city === ""){
+        alert("Please enter a city name");
+        return;
+    }
+
+    const url =
+    `https://wttr.in/${city}?format=j1`;
+
+    try{
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const temp =
+        data.current_condition[0].temp_C;
+
+        const condition =
+        data.current_condition[0]
+        .weatherDesc[0].value;
+
+        document.getElementById(
+        "weatherResult").innerHTML = `
+        <h3>${city}</h3>
+        <p>🌡 Temperature: ${temp}°C</p>
+        <p>☁ Condition: ${condition}</p>
+        `;
+
+    }catch(error){
+
+        document.getElementById(
+        "weatherResult").innerHTML =
+        "Weather data not found";
+
+    }
+}
+</script>
+
+</body>
+</html>
